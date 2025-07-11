@@ -105,28 +105,37 @@
         let form = document.querySelector('#form');
         let btn = document.querySelector('#btn');
         let res = document.querySelector('#res');
-       form.addEventListener("submit", (e)=>{
-        e.preventDefault(); // Prevent default form submission
-        btn.disabled = true; // Disable the submit button
-        btn.value = "Submitting..."; // Change button text
-        let d = new FormData(form);
-        fetch(url, {
-            method: 'POST',
-            body: d
-        })
-        .then((res) => res.text())
-        .then((finalRes) => {
-             // Reset the form fields
-            btn.disabled = false; // Re-enable the submit button
-            btn.value = "Submit"; // Reset button text
-            console.log(finalRes);
-            document.querySelector('#res').innerHTML = finalRes;
-             setTimeout(() => {
-                document.querySelector('#res').innerHTML = '';
-            }, 5000);
-            form.reset();
-        });
+       window.onload = function () {
+  let form = document.querySelector('#form');
+  let btn = document.querySelector('#btn');
+  let res = document.querySelector('#res');
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.innerText = "Submitting...";
+    let d = new FormData(form);
+
+    fetch(url, {
+      method: 'POST',
+      body: d
+    })
+    .then((res) => res.text())
+    .then((finalRes) => {
+      btn.disabled = false;
+      btn.innerText = "Submit";
+      res.innerHTML = finalRes;
+      setTimeout(() => res.innerHTML = '', 5000);
+      form.reset();
+    })
+    .catch((err) => {
+      btn.disabled = false;
+      btn.innerText = "Submit";
+      res.innerHTML = "Submission failed. Please try again.";
+      console.error(err);
     });
+  });
+};
 
 
     </script>
